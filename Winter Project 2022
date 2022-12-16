@@ -1,0 +1,347 @@
+import processing.sound.*; //star uses every part of the processing sound library
+
+SoundFile music;
+SoundFile music1;
+SoundFile music2;
+SoundFile music3;
+SoundFile JingleBells;
+
+int counter = 0;
+
+float x2 = 100;
+float y2 = 50;
+float w2 = 150;
+float h2 = 80;
+
+//jellyfish animation
+PImage[] gif;
+int numberOfFrames;
+int f;
+
+//polar bear animation
+PImage[] gif1;
+int numberOfFrames1;
+int g;
+
+//slug animation
+PImage[] gif2;
+int numberOfFrames2;
+int h;
+
+//snow background animation
+PImage[] gif3;
+int numberOfFrames3;
+int j;
+
+
+PImage celebrationPic;
+PImage incorrectPic;
+
+
+PFont font;
+
+String userInput = "";
+String name = "";
+
+
+class Button {
+  float x;
+  float y;
+  float answerWidth;
+  float answerHeight;
+  
+  String t;
+  color boxColor;
+  color boxMouseOverColor;
+  color textColor;
+  
+  int v;
+  
+  int x2 = 350;
+  int y2 = 210;
+  int w2 = 500;
+  int h2 = 80;
+
+  Button(int value){
+    v = value;
+    x = width/2;
+    y = height/2;
+    answerWidth = 110; //Width of each answer choice
+    answerHeight = 50; //Height of each answer choice
+    boxColor = color(0); //color of answer choice boxes
+    boxMouseOverColor = color(0, 255, 0); //color of boxes when mouse is over it
+    textColor = color(255,255,0); //'true' or 'false' text color
+    t = "";
+
+  }
+  
+  void draw(){
+    
+//flappy game bird button
+   if (counter >= 3){
+     
+   fill(150,230,210);
+   rect(x2, y2, w2, h2);
+   fill(0,0,0);
+   textSize(40);
+   text("PRESS TO PLAY GAME", 350, 230, 500, 60);
+   
+   if(mousePressed){
+    if(mouseX > x2 && mouseX < x2 + w2 && mouseY > y2 && mouseY < y2 + h2){
+     println("The mouse is pressed and over the button");
+     fill(0);
+   //do stuff 
+  }
+ } 
+}
+//end of flappy bird game button
+    textSize(30);
+    text("Points:" + counter, 950, 450, 130, 300);
+    fill(0,0,255);
+    
+    fill(0);
+    rect(880, 665, 235, 100); //xpos, ypos, xlen, ylen
+    
+    fill(255,255,255);
+    text("Press Esc\nto end game", 1000, 700);
+    
+    noStroke();
+    fill(boxColor);
+    //if the cursor is over the box, set box color to "boxMouseOverColor"
+    if( over() ){ 
+      fill(boxMouseOverColor);
+    }
+    pushMatrix(); //stores coordinates of current rectangle/shape
+    translate(x,y);
+    rect(width/3,0,answerWidth,answerHeight);
+    fill(textColor); //sets the 'true' or 'false' words to a specified color
+    textAlign(CENTER); //aligns text in the center of the screen
+    text( t, width/2.652, answerHeight/2 + 10); //centers text in the middle of the answer choices
+    popMatrix(); //restores previous coordinates from the latest pushmatrix
+  }
+  
+  boolean over(){ //checks whether the mouse is over top the button or not
+    return( x+375 < mouseX && mouseX < x+375 + answerWidth && y < mouseY && mouseY < y + answerHeight );
+  }
+
+  void mousePressed(){
+    if( over() ){
+      useAnswer( v );
+    }
+  }
+  void setText(String newText){
+    t = newText; //brings up new text for the next question
+  }
+}
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+
+Button[] buttons;
+void setup(){
+  
+  size(640, 360); 
+  music = new SoundFile(this, "openingSound.mp3");
+  music.play();
+  
+  music = new SoundFile(this, "JingleBells.mp3");
+  music.play();
+  
+  //jellyfish animation
+  numberOfFrames = 40;
+  gif = new PImage[numberOfFrames];
+  
+  int k = 0;
+  while (k<numberOfFrames){
+    gif[k] = loadImage("frame_" + k + "_delay-0.12s.gif");
+    k=k+1;
+  }
+  
+  //polar bear animation
+  numberOfFrames1 = 34;
+  gif1 = new PImage[numberOfFrames1];
+  
+  int l = 0;
+  while (l<numberOfFrames1){
+    gif1[l] = loadImage("frame_" + l + "_delay-0.11s.gif");
+    l=l+1;
+  }
+  
+  //Slug animation
+    numberOfFrames2 = 5;
+  gif2 = new PImage[numberOfFrames2];
+  
+  int m = 0;
+  while (m<numberOfFrames2){
+    gif2[m] = loadImage("frame_" + m + "_delay-0.04s.gif");
+    m=m+1;
+  }
+  
+  //snow background animation
+  numberOfFrames3 = 3;
+  gif3 = new PImage[numberOfFrames3];
+  
+  int n = 0;
+  while (n<numberOfFrames3){
+    gif3[n] = loadImage("frame_" + n + "_delay-0.25s.gif");
+    n=n+1;
+  } 
+  
+  size(1200,800); //Size of screen
+  
+  buttons = new Button[2]; //creating a new button
+  for( int i = 0; i < buttons.length; i++){ 
+    buttons[i] = new Button(i);
+    buttons[i].x = 80 + 120 * i ; //replicates another button with the same dimensions?? Not sure about this
+//  120 controls the distance between the black boxes as well as the 'true' and 'false'
+  } 
+  
+  prime_buttons();
+  
+  //loading images and fonts
+  celebrationPic = loadImage("celebration.png");
+  incorrectPic = loadImage("incorrect.png");
+  font = createFont("Arial", 35);
+}
+
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+
+void draw(){
+  
+  if (mousePressed && dist(mouseX, mouseY, width/2, height/2) <50) {
+  }
+ 
+  background(80,80,100); //color of background
+  
+  //jellyfish animation
+  image(gif[f], width/3, 120, width/3, height/3);
+  f = f+1;
+  if (f == numberOfFrames) f = 0;
+  
+  //polar bear animation
+  image(gif1[g], -10, 120, width/3, height/3);
+  g = g+1;
+  if (g == numberOfFrames1) g = 0;
+  
+  //slug animation
+  image(gif2[h], 810, 120, width/3, height/3);
+  h = h+1;
+  if (h == numberOfFrames2) h = 0;
+  
+  //snow background animation
+  image(gif3[j], 0, 0, width, height);
+  j = j+1;
+  if (j == numberOfFrames3) j = 0;
+  
+  
+  fill(255); //Color of questions
+  textSize(50); //Size of questions
+  text(questions[current_question][2], width/2, 130); //location of the question on the screen
+
+  // there is a 2 in the [] because the String questions list index value #2 are the questions
+  for( int i = 0; i < buttons.length; i++){
+    buttons[i].draw();
+  }
+  
+  textFont(font);
+  fill(255);
+  
+  //Asks for name and stores it
+  text("Enter your name here\nhit 'enter' when done.", width/2, 570);
+  text("Name: " + userInput, width/2, 700);
+  text("Saved name: " + name, width/2, 740);
+}
+
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+
+//if \n or the enter key is pressed, name will be stored
+void keyPressed(){
+  if (key == '\n'){
+    name = userInput; //sets "saved name" equal to the "Name"
+    userInput = "";   //resets "Name" leaving it blank
+  } else if (key == ESC){ //End game button
+    exit();
+  } else if (key == BACKSPACE){
+    userInput = userInput.substring(0, userInput.length()-1);
+  } else {
+    userInput = userInput + key; 
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+
+//if the button is pressed, i will increment by 1 and move onto the next question
+//each button click = next question
+void mousePressed(){
+    for( int i = 0; i < buttons.length; i++){
+    buttons[i].mousePressed();
+  }
+}
+
+//grabbed this "questions" format online (the list-like format)
+//uses index values to print the questions, and select the right answers
+String[][] questions = {
+  
+  { "Olaf", "Sven", "What is the name of the snowman in frozen?", "0", }, //index value, starts from 0
+  { "No", "Yes", "Is every single snowflake unique?", "1" }, //thats why "0" is referring to the first option, "true"
+  { "Odd", "Even", "Is the # of Santa's reindeer odd or even?", "1" }, //0 corresponds to true, 1 corresponds to false, this is how the correct answer is identified
+};
+
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+
+int current_question = 0; //the first question
+void useAnswer(int givenAnswer){ 
+  //if corresponding answer and question match... correct
+  //if corresponding answer and question dont match... incorrect 
+  
+  if( int(questions[current_question][3]) == givenAnswer ){
+    music1 = new SoundFile(this, "Correct Jingle.mp3");
+    music1.play(1.0, 0, 1.0, 0, 12);
+    println( "RIGHT!" );
+    image(celebrationPic, 0, 0, 1200, 800);
+    text("Correct!!!", 580, 400);
+    counter = counter + 1;
+
+    
+    //how do i make the celebration pic and 'correct' text stay?
+    //input celebration noises
+    
+  } else {
+    music2 = new SoundFile(this, "Wrong Answer.mp3");
+    music2.play();
+    println( "WRONG!" );
+    image(incorrectPic, 0, 0, 1200, 800);
+    text("WRONG!", 580, 400);
+    //input incorrect noise and x mark
+  }
+    
+  
+  //increments the current_question, meaning it moves onto the next quesiton
+  current_question++;
+  //number %= 2
+  //is the same thing as
+  //number = number % 2
+  
+  current_question%=questions.length;
+  //current_question = current_question % questions.length
+  prime_buttons();
+}
+
+//depending on the button, the specified question and answer choices will be displayed
+//button 1 will display a question that goes with button 1
+//button 2 will display a question that goes with button 2, and so on
+void prime_buttons(){
+  for( int i = 0; i < buttons.length; i++){ //that is why the i is incrementing
+    buttons[i].setText(questions[current_question][i]); 
+    //and depending on what the i is, a different button with corresponding questions will be displayed
+  }
+}
+
