@@ -6,7 +6,6 @@ SoundFile music2;
 SoundFile music3;
 SoundFile JingleBells;
 
-
 int counter = 0;
 
 float x2 = 100;
@@ -78,6 +77,18 @@ class Button {
   
   void draw(){
     
+//array
+int cols = 10;
+int rows = 10;
+int[][] myArray = new int[cols][rows];
+
+for (int i = 0; i < cols; i++) {
+  for (int j = 0; j < rows; j++) {
+    myArray[i][j] = 0;
+  }
+}
+
+
 //flappy game bird button
    if (counter >= 3){
      
@@ -88,10 +99,11 @@ class Button {
    text("PRESS TO PLAY GAME", 350, 230, 500, 60);
    
    if(mousePressed){
+     
     if(mouseX > x2 && mouseX < x2 + w2 && mouseY > y2 && mouseY < y2 + h2){
-     println("The mouse is pressed and over the button");
-     fill(0);
-   //do stuff 
+   
+    
+    
   }
  } 
 }
@@ -324,7 +336,12 @@ void useAnswer(int givenAnswer){
     //input incorrect noise and x mark
   }
     
-  
+    
+    
+    
+    
+    
+    
   //increments the current_question, meaning it moves onto the next quesiton
   current_question++;
   //number %= 2
@@ -345,4 +362,3 @@ void prime_buttons(){
     //and depending on what the i is, a different button with corresponding questions will be displayed
   }
 }
-
