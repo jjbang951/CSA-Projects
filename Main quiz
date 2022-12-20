@@ -1,5 +1,6 @@
 import processing.sound.*; //star uses every part of the processing sound library
 
+
 SoundFile music;
 SoundFile music1;
 SoundFile music2;
